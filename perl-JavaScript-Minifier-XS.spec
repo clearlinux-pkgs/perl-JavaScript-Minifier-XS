@@ -4,14 +4,15 @@
 #
 Name     : perl-JavaScript-Minifier-XS
 Version  : 0.11
-Release  : 10
+Release  : 11
 URL      : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libj/libjavascript-minifier-xs-perl/libjavascript-minifier-xs-perl_0.11-1.debian.tar.xz
-Summary  : 'XS based JavaScript minifier'
+Summary  : XS based JavaScript minifier
 Group    : Development/Tools
-License  : Artistic-1.0-Perl
+License  : Artistic-1.0 Artistic-1.0-Perl GPL-1.0
 Requires: perl-JavaScript-Minifier-XS-lib = %{version}-%{release}
+Requires: perl-JavaScript-Minifier-XS-license = %{version}-%{release}
 BuildRequires : buildreq-cpan
 
 %description
@@ -22,6 +23,7 @@ Summary: dev components for the perl-JavaScript-Minifier-XS package.
 Group: Development
 Requires: perl-JavaScript-Minifier-XS-lib = %{version}-%{release}
 Provides: perl-JavaScript-Minifier-XS-devel = %{version}-%{release}
+Requires: perl-JavaScript-Minifier-XS = %{version}-%{release}
 
 %description dev
 dev components for the perl-JavaScript-Minifier-XS package.
@@ -30,9 +32,18 @@ dev components for the perl-JavaScript-Minifier-XS package.
 %package lib
 Summary: lib components for the perl-JavaScript-Minifier-XS package.
 Group: Libraries
+Requires: perl-JavaScript-Minifier-XS-license = %{version}-%{release}
 
 %description lib
 lib components for the perl-JavaScript-Minifier-XS package.
+
+
+%package license
+Summary: license components for the perl-JavaScript-Minifier-XS package.
+Group: Default
+
+%description license
+license components for the perl-JavaScript-Minifier-XS package.
 
 
 %prep
@@ -40,7 +51,7 @@ lib components for the perl-JavaScript-Minifier-XS package.
 cd ..
 %setup -q -T -D -n JavaScript-Minifier-XS-0.11 -b 1
 mkdir -p deblicense/
-mv %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/JavaScript-Minifier-XS-0.11/deblicense/
+cp -r %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/JavaScript-Minifier-XS-0.11/deblicense/
 
 %build
 export http_proxy=http://127.0.0.1:9/
@@ -64,6 +75,8 @@ make TEST_VERBOSE=1 test
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/perl-JavaScript-Minifier-XS
+cp deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-JavaScript-Minifier-XS/deblicense_copyright
 if test -f Makefile.PL; then
 make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
@@ -85,3 +98,7 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 %files lib
 %defattr(-,root,root,-)
 /usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/auto/JavaScript/Minifier/XS/XS.so
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/perl-JavaScript-Minifier-XS/deblicense_copyright
