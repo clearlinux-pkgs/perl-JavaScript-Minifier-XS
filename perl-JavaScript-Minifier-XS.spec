@@ -4,15 +4,15 @@
 #
 Name     : perl-JavaScript-Minifier-XS
 Version  : 0.11
-Release  : 11
+Release  : 12
 URL      : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libj/libjavascript-minifier-xs-perl/libjavascript-minifier-xs-perl_0.11-1.debian.tar.xz
-Summary  : XS based JavaScript minifier
+Summary  : 'XS based JavaScript minifier'
 Group    : Development/Tools
 License  : Artistic-1.0 Artistic-1.0-Perl GPL-1.0
-Requires: perl-JavaScript-Minifier-XS-lib = %{version}-%{release}
 Requires: perl-JavaScript-Minifier-XS-license = %{version}-%{release}
+Requires: perl-JavaScript-Minifier-XS-perl = %{version}-%{release}
 BuildRequires : buildreq-cpan
 
 %description
@@ -21,21 +21,11 @@ JavaScript::Minifier::XS minifies JavaScript documents by removing un-necessary 
 %package dev
 Summary: dev components for the perl-JavaScript-Minifier-XS package.
 Group: Development
-Requires: perl-JavaScript-Minifier-XS-lib = %{version}-%{release}
 Provides: perl-JavaScript-Minifier-XS-devel = %{version}-%{release}
 Requires: perl-JavaScript-Minifier-XS = %{version}-%{release}
 
 %description dev
 dev components for the perl-JavaScript-Minifier-XS package.
-
-
-%package lib
-Summary: lib components for the perl-JavaScript-Minifier-XS package.
-Group: Libraries
-Requires: perl-JavaScript-Minifier-XS-license = %{version}-%{release}
-
-%description lib
-lib components for the perl-JavaScript-Minifier-XS package.
 
 
 %package license
@@ -46,18 +36,28 @@ Group: Default
 license components for the perl-JavaScript-Minifier-XS package.
 
 
+%package perl
+Summary: perl components for the perl-JavaScript-Minifier-XS package.
+Group: Default
+Requires: perl-JavaScript-Minifier-XS = %{version}-%{release}
+
+%description perl
+perl components for the perl-JavaScript-Minifier-XS package.
+
+
 %prep
 %setup -q -n JavaScript-Minifier-XS-0.11
-cd ..
-%setup -q -T -D -n JavaScript-Minifier-XS-0.11 -b 1
+cd %{_builddir}
+tar xf %{_sourcedir}/libjavascript-minifier-xs-perl_0.11-1.debian.tar.xz
+cd %{_builddir}/JavaScript-Minifier-XS-0.11
 mkdir -p deblicense/
-cp -r %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/JavaScript-Minifier-XS-0.11/deblicense/
+cp -r %{_builddir}/debian/* %{_builddir}/JavaScript-Minifier-XS-0.11/deblicense/
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
+export LANG=C.UTF-8
 if test -f Makefile.PL; then
 %{__perl} Makefile.PL
 make  %{?_smp_mflags}
@@ -67,7 +67,7 @@ else
 fi
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
@@ -76,7 +76,7 @@ make TEST_VERBOSE=1 test
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/perl-JavaScript-Minifier-XS
-cp deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-JavaScript-Minifier-XS/deblicense_copyright
+cp %{_builddir}/JavaScript-Minifier-XS-0.11/deblicense/copyright %{buildroot}/usr/share/package-licenses/perl-JavaScript-Minifier-XS/279997f6998e49b91f5313df30f01aa47e6691be
 if test -f Makefile.PL; then
 make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
@@ -89,16 +89,16 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/JavaScript/Minifier/XS.pm
 
 %files dev
 %defattr(-,root,root,-)
 /usr/share/man/man3/JavaScript::Minifier::XS.3
 
-%files lib
-%defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.28.2/x86_64-linux-thread-multi/auto/JavaScript/Minifier/XS/XS.so
-
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/perl-JavaScript-Minifier-XS/deblicense_copyright
+/usr/share/package-licenses/perl-JavaScript-Minifier-XS/279997f6998e49b91f5313df30f01aa47e6691be
+
+%files perl
+%defattr(-,root,root,-)
+/usr/lib/perl5/vendor_perl/5.30.1/x86_64-linux-thread-multi/JavaScript/Minifier/XS.pm
+/usr/lib/perl5/vendor_perl/5.30.1/x86_64-linux-thread-multi/auto/JavaScript/Minifier/XS/XS.so
