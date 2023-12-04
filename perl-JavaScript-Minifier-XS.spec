@@ -4,7 +4,7 @@
 #
 Name     : perl-JavaScript-Minifier-XS
 Version  : 0.15
-Release  : 28
+Release  : 29
 URL      : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.15.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.15.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libj/libjavascript-minifier-xs-perl/libjavascript-minifier-xs-perl_0.11-1.debian.tar.xz
